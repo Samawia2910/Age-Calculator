@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSS file -->
+        <link rel="stylesheet" href="css/style.css">
+	<title>Age Calculator</title>
+</head>
+
+<body>
+
+
+	<div class="container">
+
+<marquee class="heading">Calculate Your Age</marquee>
+
+<div style="background-color: skyblue; position: fixed; padding: 75px; box-shadow:  3px 3px 5px #ccc,
+ -3px -3px 5px #fff, 3px 3px 5px #ccc inset, -3px -3px 5px #fff inset;">
+ 
+        <div class="input">
+        	<input type="date" class="date" id="input_data">
+        	  <button class="submit" onclick="calculateAge()">calculate</button>
+        	</div>
+
+        	<div class="output">
+        		<div class="years box">
+        			<span id="year">-</span>
+        			<p>Years</p>
+        		</div>
+        		<div class="months box">
+        			<span id="month">-</span>
+        			<p>Months</p>
+        		</div>
+        		<div class="days box">
+        			<span id="day">-</span>
+        			<p>Days</p>
+        		</div>
+        	</div>
+        	</div>
+        
+</body>
+</html>
+<!-- Javascript -->
+<script>
+	
+	const months = [31,28,31,30,31,30,31,31,30,31,30,31]
+	function calculateAge(){
+		let todayDate = new Date();
+		let inputDate = new Date(document.getElementById("input_data").value);
+		let totalMonth,totalDate,totalYear;
+
+		let birthDate = inputDate.getDate();
+		let birthMonth = inputDate.getMonth()+1;
+		let birthYear = inputDate.getFullYear();
+
+		let currentYear = todayDate.getFullYear();
+		let currentMonth = todayDate.getMonth()+1;
+		let currentDate = todayDate.getDate();
+
+		leapChecker (currentYear);
+
+		if( 
+			 birthYear > currentYear ||
+             ( birthMonth > currentMonth && birthYear == currentYear) ||
+             (birthDate > currentDate && birthMonth == currentMonth && birthYear == currentYear)
+		){
+			alert("No Born Yet also wrong date");
+		    displayResult("-","-","-");
+		    return;
+	}
+
+	totalYear = currentYear - birthYear;
+
+	 if(currentMonth >= birthMonth){
+	 	totalMonth = currentMonth -birthMonth;
+	 }
+
+	 else{
+	 	totalYear--;
+	 	 totalMonth = 12 + currentMonth - birthMonth;
+	 }
+
+	 if(currentDate >= birthDate){
+	 	totalDate = currentDate - birthDate;
+	 }
+
+	 else {
+	 	totalMonth--;
+	 	let days = months[currentMonth - 2];
+	 	totalDate = days + currentDate - birthDate;
+        if(totalMonth < 0) {
+	 		totalMonth = 11;
+	 		totalYear--;
+	 	}
+
+	 	}
+	 	displayResult(totalDate,totalMonth,totalYear);
+	 }
+
+	 function displayResult(tDate,tMonth,tYear) {
+	 	document.getElementById('year').textContent = tYear;
+	 	document.getElementById('month').textContent = tMonth;
+	 	document.getElementById('day').textContent = tDate;
+	 }
+
+	 function leapChecker(year){
+	 	if (year % 4 == 0 || (year % 100 == 0 && year % 400 == 0)) {
+	 		months[1] = 29;
+	 	}
+
+	 	else{
+	 		months[1] = 28;
+	 	}
+	 }
+
+</script>
